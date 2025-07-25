@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PV de Recette d'Intervention - DGFiP</title>
+    <!-- Intégration de Tailwind CSS pour le style -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Intégration de Lucide Icons pour les icônes -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Ajout d'un style pour s'assurer que le texte des inputs est bien visible */
+        input, select, textarea {
+            color: #1f2937; /* text-gray-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="min-h-screen py-4 px-4">
+      <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        
+        <!-- En-tête avec les VRAIS logos -->
+        <div class="bg-white text-white p-3 border-b-4 border-blue-800">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+            <!-- Logos officiels -->
+            <div class="flex items-center space-x-4">
+              <!-- Le chemin est relatif au fichier HTML. Le dossier 'logos' doit être au même niveau. -->
+              <img src="logos/logo_rep_fran.png" alt="Logo République Française" class="h-16 w-auto">
+              <img src="logos/logo_dgfip.png" alt="Logo DGFiP" class="h-12 w-auto">
+            </div>
+
+            <!-- Titre -->
+            <div class="flex-1 text-center sm:text-left sm:ml-6">
+              <h1 class="text-xl font-bold text-gray-900">PV DE RECETTE D'INTERVENTION</h1>
+              <p class="text-gray-700 text-sm font-semibold">Datacenter - Interventions Externes</p>
+            </div>
+
+            <!-- Numéro d'intervention -->
+            <div class="bg-gray-100 rounded p-2 min-w-[180px] border border-gray-200">
+              <label class="block text-xs text-gray-700 font-semibold mb-1">N° Intervention</label>
+              <input type="text" id="interventionNumber" class="w-full bg-white text-gray-800 border border-gray-300 rounded px-2 py-1 text-center font-mono font-bold" placeholder="XXXXXX-XXX">
+              <div id="currentDate" class="text-center text-xs text-gray-600 font-semibold mt-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenu principal du formulaire -->
+        <div class="p-3 space-y-4">
+
+          <!-- Section Planning & Intervenant -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <h3 class="font-bold mb-2 flex items-center text-blue-800 text-base">
+              <i data-lucide="calendar" class="w-5 h-5 mr-2"></i> Planning & Intervenant
+            </h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Date</label>
+                <input type="date" id="date" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Heure début → fin</label>
+                <div class="flex gap-1">
+                  <input type="time" id="startTime" class="w-full border border-gray-300 rounded px-1 py-1 text-sm font-semibold">
+                  <input type="time" id="endTime" class="w-full border border-gray-300 rounded px-1 py-1 text-sm font-semibold">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Technicien</label>
+                <input type="text" id="technicianName" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="Nom, Prénom">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Société</label>
+                <input type="text" id="company" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="Société">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Section Localisation & Équipement -->
+          <div class="bg-purple-50 border border-purple-200 rounded-lg p-3">
+            <h3 class="font-bold mb-2 flex items-center text-purple-800 text-base">
+              <i data-lucide="map-pin" class="w-5 h-5 mr-2"></i> Localisation & Équipement
+            </h3>
+            <div class="grid grid-cols-3 lg:grid-cols-6 gap-3 mb-2">
+              <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-800">Salle</label>
+                  <input type="text" id="room" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="A-01">
+              </div>
+              <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-800">Rack</label>
+                  <input type="text" id="rack" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="N°27">
+              </div>
+              <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-800">Position</label>
+                  <input type="text" id="position" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="U1-U3">
+              </div>
+              <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-800">Type</label>
+                  <select id="equipmentType" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold">
+                      <option value="">Type...</option>
+                      <option value="Serveur">Serveur</option>
+                      <option value="Switch">Switch</option>
+                      <option value="Routeur">Routeur</option>
+                      <option value="Firewall">Firewall</option>
+                      <option value="Storage">Storage</option>
+                      <option value="UPS">UPS</option>
+                      <option value="Autre">Autre</option>
+                  </select>
+              </div>
+              <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-800">Marque</label>
+                  <input type="text" id="brand" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="Dell, HP">
+              </div>
+              <div>
+                  <label class="block text-xs font-semibold mb-1 text-gray-800">Modèle</label>
+                  <input type="text" id="model" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="R740">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-gray-800">N° de série</label>
+                    <input type="text" id="serialNumber" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="S/N">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-gray-800">Hostname</label>
+                    <input type="text" id="hostname" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="srv-prod-01">
+                </div>
+            </div>
+          </div>
+          
+          <!-- Section Intervention & État -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <h3 class="font-bold mb-2 flex items-center text-yellow-800 text-base">
+              <i data-lucide="wrench" class="w-5 h-5 mr-2"></i> Intervention & État équipement
+            </h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-2">
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Type d'intervention</label>
+                <select id="interventionType" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold">
+                  <option value="">Sélectionner...</option>
+                  <option value="Installation">Installation</option>
+                  <option value="Maintenance préventive">Maintenance préventive</option>
+                  <option value="Maintenance corrective">Maintenance corrective</option>
+                  <option value="Remplacement">Remplacement</option>
+                  <option value="Configuration">Configuration</option>
+                  <option value="Mise à jour">Mise à jour</option>
+                  <option value="Diagnostic">Diagnostic</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">État équipement</label>
+                <div class="flex gap-2">
+                  <label class="flex items-center space-x-2 p-1 border rounded cursor-pointer hover:bg-green-100 transition-colors flex-1">
+                    <input type="radio" name="equipmentState" value="OK" class="text-green-600 focus:ring-green-500" checked>
+                    <i data-lucide="check-circle" class="w-4 h-4 text-green-600"></i>
+                    <span class="text-green-800 text-sm font-bold">OK</span>
+                  </label>
+                  <label class="flex items-center space-x-2 p-1 border rounded cursor-pointer hover:bg-yellow-100 transition-colors flex-1">
+                    <input type="radio" name="equipmentState" value="Warning" class="text-yellow-600 focus:ring-yellow-500">
+                    <i data-lucide="alert-circle" class="w-4 h-4 text-yellow-600"></i>
+                    <span class="text-yellow-800 text-sm font-bold">Attention</span>
+                  </label>
+                  <label class="flex items-center space-x-2 p-1 border rounded cursor-pointer hover:bg-red-100 transition-colors flex-1">
+                    <input type="radio" name="equipmentState" value="KO" class="text-red-600 focus:ring-red-500">
+                    <i data-lucide="alert-circle" class="w-4 h-4 text-red-600"></i>
+                    <span class="text-red-800 text-sm font-bold">KO</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Motif prévu</label>
+                <textarea id="plannedReason" class="w-full border border-gray-300 rounded px-2 py-1 h-16 text-sm" placeholder="Description prévue..."></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Travaux effectués</label>
+                <textarea id="actualWork" class="w-full border border-gray-300 rounded px-2 py-1 h-16 text-sm" placeholder="Description réelle..."></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Section Remarques -->
+          <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
+            <h3 class="font-bold mb-1 text-indigo-800 text-base">Problèmes rencontrés & Remarques</h3>
+            <textarea id="remarks" class="w-full border border-gray-300 rounded px-2 py-1 h-20 text-sm" placeholder="Problèmes rencontrés, remarques et observations..."></textarea>
+          </div>
+
+          <!-- Section Validation -->
+          <div class="bg-blue-50 border-2 border-blue-300 rounded-lg p-3">
+            <h3 class="font-bold mb-2 text-blue-800 text-base">Validation de l'intervention</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Validateur (Datacenter)</label>
+                <input type="text" id="validatorName" class="w-full border border-gray-300 rounded px-2 py-1 text-sm font-semibold" placeholder="Nom du responsable">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1 text-gray-800">Signature</label>
+                <div class="border border-gray-400 rounded bg-white h-24 relative">
+                  <canvas id="signature-canvas" class="w-full h-full cursor-crosshair touch-none"></canvas>
+                </div>
+                <button id="clear-signature" class="mt-1 text-xs text-blue-600 hover:text-blue-800 bg-blue-100 px-2 py-1 rounded font-semibold">Effacer</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Statut et Actions -->
+          <div id="actions-section" class="bg-white border border-gray-200 rounded-lg p-3">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+              <div id="validation-status" class="flex items-center text-orange-600 bg-orange-100 px-3 py-1 rounded-full text-sm font-bold">
+                <i data-lucide="clock" class="w-4 h-4 mr-2"></i>
+                <span>En attente</span>
+              </div>
+              <div id="action-buttons" class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                <button id="validate-intervention" class="px-6 py-2 rounded flex items-center justify-center space-x-2 text-sm font-bold bg-green-600 hover:bg-green-700 text-white">
+                  <i data-lucide="check-circle" class="w-5 h-5"></i>
+                  <span>Valider & Enregistrer PDF</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Rendre les icônes
+      lucide.createIcons();
+
+      // Mettre la date du jour automatiquement
+      const today = new Date();
+      document.getElementById('date').value = today.toISOString().split('T')[0];
+      document.getElementById('currentDate').textContent = today.toLocaleDateString('fr-FR');
+
+      // Logique de la signature
+      const canvas = document.getElementById('signature-canvas');
+      const ctx = canvas.getContext('2d');
+      let isDrawing = false;
+      let hasSignature = false;
+      
+      function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas(); 
+
+      function getPos(evt) {
+        const rect = canvas.getBoundingClientRect();
+        const event = evt.touches ? evt.touches[0] : evt;
+        return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      }
+
+      function startDrawing(e) {
+        e.preventDefault(); isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        hasSignature = true;
+      }
+
+      function stopDrawing() { isDrawing = false; }
+
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseleave', stopDrawing);
+      canvas.addEventListener('touchstart', startDrawing, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      canvas.addEventListener('touchend', stopDrawing);
+
+      document.getElementById('clear-signature').addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hasSignature = false;
+      });
+      
+      // Logique des boutons
+      const validateButton = document.getElementById('validate-intervention');
+      const validationStatus = document.getElementById('validation-status');
+      const actionButtonsContainer = document.getElementById('action-buttons');
+
+      validateButton.addEventListener('click', () => {
+        const validatorName = document.getElementById('validatorName').value;
+        if (!validatorName || !hasSignature) {
+          alert('ERREUR : Le nom du validateur et la signature sont obligatoires.');
+          return;
+        }
+        
+        // 1. Changer le statut visuel
+        validationStatus.innerHTML = `
+          <i data-lucide="check-circle" class="w-4 h-4 mr-2"></i>
+          <span class="font-semibold">Validée</span>
+        `;
+        validationStatus.className = "flex items-center text-green-700 bg-green-100 px-3 py-1 rounded-full text-sm font-bold";
+        
+        // 2. Remplacer les boutons
+        actionButtonsContainer.innerHTML = `
+            <button id="new-entry" class="px-6 py-2 rounded flex items-center justify-center space-x-2 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                <span>Nouvelle Saisie</span>
+            </button>
+        `;
+        
+        // 3. Ajouter la logique au nouveau bouton
+        document.getElementById('new-entry').addEventListener('click', () => {
+            location.reload();
+        });
+        
+        // 4. Recréer toutes les icônes sur la page
+        lucide.createIcons();
+        
+        // 5. Déclencher l'impression pour sauvegarde en PDF
+        alert('Intervention validée ! La fenêtre de sauvegarde PDF va s\'ouvrir.');
+        window.print();
+      });
+
+    </script>
+</body>
+</html>
